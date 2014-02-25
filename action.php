@@ -35,6 +35,24 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
     public function handle_fixme(Doku_Event &$event, $param) {
     }
 
+
+    public function tpl(){
+        global $ID;
+        // fixme check for feedback user
+
+        $info = array(
+            'id'   => $ID,
+            'user' => $_SERVER['REMOTE_USER'],
+            'ua'   => $_SERVER['HTTP_USER_AGENT'],
+            'ip'   => clientIP(),
+        );
+        $json = new JSON(JSON_LOOSE_TYPE);
+        $info = $json->encode($info);
+
+
+        echo '<a href="#" class="plugin_feedback" data-feedback="'.hsc($info).'">'.$this->getLang('feedback').'</a>';
+    }
+
 }
 
 // vim:ts=4:sw=4:et:

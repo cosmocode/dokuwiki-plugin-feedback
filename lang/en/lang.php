@@ -5,12 +5,13 @@
  * @author Andreas Gohr <gohr@cosmocode.de>
  */
 
-// menu entry for admin plugins
-// $lang['menu'] = 'Your menu entry';
 
-// custom language strings for the plugin
-// $lang['fixme'] = 'FIXME';
+$lang['menu'] = 'Set Feedback Managers';
 
+$lang['feedback'] = 'Send Feedback';
 
-
-//Setup VIM: ex: et ts=4 :
+$lang['js']['title'] = 'Please provide feedback';
+$lang['js']['cancel'] = 'Cancel';
+$lang['js']['close']  = 'Close';
+$lang['js']['submit'] = 'Submit';
+$lang['js']['thanks'] = 'Thank you for your feedback.';

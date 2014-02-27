@@ -114,8 +114,9 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
     public function getFeedbackContact($id) {
         $conf = confToHash(DOKU_CONF . 'plugin_feedback.conf');
 
+        $ns = $id;
         do {
-            $ns = getNS($id);
+            $ns = getNS($ns);
             if(!$ns) $ns = '*';
             if(isset($conf[$ns])) return $conf[$ns];
         } while($ns != '*');

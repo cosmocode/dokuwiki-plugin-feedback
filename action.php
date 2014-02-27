@@ -35,7 +35,10 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
     public function handle_start(Doku_Event &$event, $param) {
         global $ID;
         global $JSINFO;
+        global $ACT;
 
+        // only on show
+        if($ACT != 'show') return;
         // allow anonymous feedback?
         if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) return;
         // any contact defined?
@@ -111,9 +114,11 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
     public function getFeedbackContact($id) {
         $conf = confToHash(DOKU_CONF . 'plugin_feedback.conf');
 
-        while($ns = getNS($id)) {
+        do {
+            $ns = getNS($id);
+            if(!$ns) $ns = '*';
             if(isset($conf[$ns])) return $conf[$ns];
-        }
+        } while($ns != '*');
 
         return false;
     }
@@ -129,7 +134,10 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
      */
     public function tpl($return = false) {
         global $ID;
+        global $ACT;
 
+        // only on show
+        if($ACT != 'show') return;
         // allow anonymous feedback?
         if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) return;
         // any contact defined?

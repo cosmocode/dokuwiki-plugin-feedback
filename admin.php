@@ -15,7 +15,7 @@ class admin_plugin_feedback extends DokuWiki_Admin_Plugin {
      * @return int sort number in admin menu
      */
     public function getMenuSort() {
-        return FIXME;
+        return 3000;
     }
 
     /**
@@ -29,13 +29,62 @@ class admin_plugin_feedback extends DokuWiki_Admin_Plugin {
      * Should carry out any processing required by the plugin.
      */
     public function handle() {
+        global $INPUT;
+        if(!$INPUT->has('data')) return;
+
+        $data = $INPUT->arr('data');
+
+        $conf = '';
+        foreach($data as $row){
+            $ns = trim($row['ns']);
+            if($ns != '*') $ns = cleanID($ns);
+            $mail = trim($row['mail']);
+            if(!$ns) continue;
+            $conf .= "$ns\t$mail\n";
+        }
+
+        if(io_saveFile(DOKU_CONF . 'plugin_feedback.conf', $conf)) {
+            msg($this->getLang('saved'), 1);
+        }
     }
 
     /**
      * Render HTML output, e.g. helpful text and a form
      */
     public function html() {
-        ptln('<h1>'.$this->getLang('menu').'</h1>');
+        global $ID;
+
+        echo $this->locale_xhtml('intro');
+
+        $conf = confToHash(DOKU_CONF . 'plugin_feedback.conf');
+        ksort($conf);
+
+        $action = wl($ID, array('do' => 'admin', 'page' => 'feedback'));
+        echo '<form action="'.$action.'" method="post">';
+
+        echo '<table class="inline">';
+        echo '<tr>';
+        echo '<th>'.$this->getLang('namespace').'</th>';
+        echo '<th>'.$this->getLang('email').'</th>';
+        echo '</tr>';
+        $cnt = 0;
+        foreach($conf as $key => $val) {
+            echo '<tr>';
+            echo '<td><input type="text" name="data['.$cnt.'][ns]" value="'.hsc($key).'" class="edit" /></td>';
+            echo '<td><input type="text" name="data['.$cnt.'][mail]" value="'.hsc($val).'" class="edit" /></td>';
+            echo '</tr>';
+            $cnt++;
+        }
+        echo '<tr>';
+        echo '<td><input type="text" name="data['.$cnt.'][ns]" value=""/></td>';
+        echo '<td><input type="text" name="data['.$cnt.'][mail]" value=""/></td>';
+        echo '</tr>';
+        echo '</table>';
+
+        echo '<input type="submit" value="'.$this->getLang('save').'" class="btn">';
+
+        echo '</form>';
+
     }
 }
 

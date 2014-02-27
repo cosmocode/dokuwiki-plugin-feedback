@@ -1,0 +1,5 @@
+====== Set Feedback Managers ======
+
+This form allows you to define email addresses of people who should receive user feedback for certain namespaces.
+
+Assigned e-mail addresses are used for sub-namespaces automatically. You can specify multiple addresses comma separated. To specify the root namespaces use an asterisk ''*''.

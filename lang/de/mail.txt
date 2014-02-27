@@ -1,0 +1,11 @@
+Ein Nutzer hat Feedback zu Ihrer Seite @PAGE@ gesendet. Hier sind die Details:
+
+@FEEDBACK@
+
+Nutzer    : @USER@
+IP-Adresse: @IPADDRESS@
+Browser   : @BROWSER@
+
+-- 
+Diese Mail kommt vom DokuWiki auf
+@DOKUWIKIURL@

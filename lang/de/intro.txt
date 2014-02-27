@@ -1,0 +1,5 @@
+====== Feedback Manager festlegen ======
+
+Über dieses Formular können Sie die E-Mail-Adressen der Feedback-Veratwortlichen für bestimmte Namensräume festlegen.
+
+Zugewiesene E-Mail-Adressen gelten automatisch auch für Unternamensräume. Sie können mehrere Adressen kommagetrennt angeben. Um den Wurzel-Namensraum festzulegen, nutzen Sie bitte ein Sternchen ''*''.

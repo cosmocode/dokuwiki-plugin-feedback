@@ -9,6 +9,7 @@ $lang['menu']         = 'Feedback Managers festlegen';
 
 $lang['feedback']     = 'Feedback geben';
 $lang['subject']      = 'Feedback';
+$lang['thanks']       = 'Vielen Dank für Ihre Unterstützung!';
 
 $lang['namespace']    = 'Namensraum';
 $lang['email']        = 'E-Mail';
@@ -19,4 +20,4 @@ $lang['js']['title']  = 'Schreiben Sie uns Ihr Feedback';
 $lang['js']['cancel'] = 'Abbrechen';
 $lang['js']['close']  = 'Schließen';
 $lang['js']['submit'] = 'Senden';
-$lang['js']['thanks'] = 'Vielen Dank für Ihre Unterstützung!';
+

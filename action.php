@@ -101,8 +101,8 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $mailer->send();
 
 
-        header('Content-Type: text/plain; charset=utf-8');
-        echo 1;
+        header('Content-Type: text/html; charset=utf-8');
+        echo $this->getLang('thanks');
     }
 
     /**

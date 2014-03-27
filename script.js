@@ -56,12 +56,7 @@ jQuery(function () {
                                 },
                                 // display thank you message
                                 function (result) {
-                                    if(result == '1'){
-                                        $dialog.html(LANG.plugins.feedback.thanks);
-                                    } else {
-                                        $dialog.html(result);
-                                    }
-
+                                    $dialog.html(result);
                                 }
                             );
                         }

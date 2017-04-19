@@ -10,6 +10,7 @@ $lang['menu']         = 'Set Feedback Managers';
 $lang['feedback']     = 'Send Feedback';
 $lang['subject']      = 'Feedback';
 $lang['thanks']       = 'Thank you for your feedback.';
+$lang['error']        = 'Unfortunately there was an error and your feedback could not be send. 😞';
 
 $lang['namespace']    = 'Namespace';
 $lang['email']        = 'E-Mail';

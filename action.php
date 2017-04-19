@@ -98,10 +98,14 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
             io_readFile($this->localFN('mail')),
             array('PAGE' => $id, 'FEEDBACK' => $feedback)
         );
-        $mailer->send();
-
-
+        $success = $mailer->send();
         header('Content-Type: text/html; charset=utf-8');
+
+        if (!$success) {
+            echo $this->getLang('error');
+            return;
+        }
+
         echo $this->getLang('thanks');
     }
 

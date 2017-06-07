@@ -90,8 +90,5 @@ class getFeedbackContact_plugin_feedback_test extends DokuWikiTest {
 
         $this->assertEquals($expected_output, $actual_output, $message);
     }
-
-
-
 }
  // getFeedbackContact

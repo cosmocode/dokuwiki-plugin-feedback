@@ -122,7 +122,6 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
 
         if ($this->getConf('span_translations')) {
             $ns = $this->adjustForTanslations($id);
-
         }
 
         if ($this->getConf('include_parent_startpage')) {

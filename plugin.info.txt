@@ -1,7 +1,7 @@
 base   feedback
 author Andreas Gohr
 email  gohr@cosmocode.de
-date   2017-04-19
+date   2017-06-07
 name   feedback plugin
 desc   Integrate a feedback tool into DokuWiki
 url    http://www.dokuwiki.org/plugin:feedback

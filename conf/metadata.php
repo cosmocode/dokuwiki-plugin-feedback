@@ -7,4 +7,5 @@
 
 
 $meta['allowanon'] = array('onoff');
-
+$meta['include_parent_startpage'] = array('onoff');
+$meta['span_translations'] = array('onoff');

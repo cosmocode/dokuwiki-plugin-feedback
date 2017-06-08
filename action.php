@@ -119,6 +119,17 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $conf = confToHash(DOKU_CONF . 'plugin_feedback.conf');
 
         $ns = $id;
+
+        if ($this->getConf('span_translations')) {
+            $ns = $this->adjustForTanslations($id);
+        }
+
+        if ($this->getConf('include_parent_startpage')) {
+            if(isset($conf[$ns])) {
+                return $conf[$ns];
+            }
+        }
+
         do {
             $ns = getNS($ns);
             if(!$ns) $ns = '*';
@@ -152,6 +163,24 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         if($return) return $html;
         echo $html;
         return '';
+    }
+
+    /**
+     * If this is a translated page, remove the language-prefix
+     *
+     * @param string $id
+     *
+     * @return string
+     */
+    protected function adjustForTanslations($id) {
+        /** @var helper_plugin_translation $trans */
+        $trans = plugin_load('helper', 'translation', defined('DOKU_UNITTEST'));
+        if ($trans) {
+            list(, $id) = $trans->getTransParts($id);
+        } else {
+            msg('Option span_translations has been activated in feedback-plugin, but translation-plugin is not installed/enabled!', -1);
+        }
+        return $id;
     }
 
 }

@@ -1,0 +1,2 @@
+# we need additional plugin(s) for testing
+https://github.com/splitbrain/dokuwiki-plugin-translation/      lib/plugins/translation

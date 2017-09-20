@@ -11,6 +11,11 @@ if(!defined('DOKU_INC')) die();
 
 class action_plugin_feedback extends DokuWiki_Action_Plugin {
 
+    /*
+     * @var true if we are on the detail page
+     */
+    protected $detail_page = false;
+
     /**
      * Registers a callback function for a given event
      *
@@ -21,7 +26,25 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
 
         $controller->register_hook('DOKUWIKI_STARTED', 'BEFORE', $this, 'handle_start');
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax');
+        $controller->register_hook('DETAIL_STARTED', 'BEFORE', $this, 'handle_detail_started');
+    }
 
+    /**
+     * Chceck if we can give a feedback
+     *
+     * @return bool
+     */
+    protected function feedback_possible() {
+        global $ACT, $ID;
+
+        // only on show and detail pages
+        if($ACT != 'show' && !$this->detail_page) return false;
+        // allow anonymous feedback?
+        if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) return false;
+        // any contact defined?
+        if(!$this->getFeedbackContact($ID)) return false;
+
+        return true;
     }
 
     /**
@@ -33,16 +56,9 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
      * @return void
      */
     public function handle_start(Doku_Event &$event, $param) {
-        global $ID;
         global $JSINFO;
-        global $ACT;
 
-        // only on show
-        if($ACT != 'show') return;
-        // allow anonymous feedback?
-        if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) return;
-        // any contact defined?
-        if(!$this->getFeedbackContact($ID)) return;
+        if(!$this->feedback_possible()) return;
 
         $JSINFO['plugin_feedback'] = true;
     }
@@ -110,6 +126,13 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
     }
 
     /**
+     * Set the flag when we are on the detail page
+     */
+    public function handle_detail_started() {
+        $this->detail_page = true;
+    }
+
+    /**
      * Get the responsible contact for givven ID
      *
      * @param $id
@@ -149,15 +172,8 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
      * @return string
      */
     public function tpl($return = false) {
-        global $ID;
-        global $ACT;
 
-        // only on show
-        if($ACT != 'show') return;
-        // allow anonymous feedback?
-        if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) return;
-        // any contact defined?
-        if(!$this->getFeedbackContact($ID)) return;
+        if(!$this->feedback_possible()) return;
 
         $html = '<a href="#" class="plugin_feedback">' . $this->getLang('feedback') . '</a>';
         if($return) return $html;

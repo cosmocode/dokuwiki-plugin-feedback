@@ -24,7 +24,6 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
      */
     public function register(Doku_Event_Handler $controller) {
 
-        $controller->register_hook('DOKUWIKI_STARTED', 'BEFORE', $this, 'handle_start');
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax');
         $controller->register_hook('DETAIL_STARTED', 'BEFORE', $this, 'handle_detail_started');
     }
@@ -45,22 +44,6 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         if(!$this->getFeedbackContact($ID)) return false;
 
         return true;
-    }
-
-    /**
-     * Add some info about the current page to the info array if feedback can be given
-     *
-     * @param Doku_Event $event  event object by reference
-     * @param mixed $param  [the parameters passed as fifth argument to register_hook() when this
-     *                           handler was registered]
-     * @return void
-     */
-    public function handle_start(Doku_Event &$event, $param) {
-        global $JSINFO;
-
-        if(!$this->feedback_possible()) return;
-
-        $JSINFO['plugin_feedback'] = true;
     }
 
     /**

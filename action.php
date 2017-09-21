@@ -96,7 +96,8 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $mailer->subject($this->getLang('subject'));
         $mailer->setBody(
             io_readFile($this->localFN('mail')),
-            array('PAGE' => $id, 'FEEDBACK' => $feedback)
+            array('PAGE' => $id, 'FEEDBACK' => $feedback),
+            array('FEEDBACK' => nl2br($feedback))
         );
         $success = $mailer->send();
         header('Content-Type: text/html; charset=utf-8');

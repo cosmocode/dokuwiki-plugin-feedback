@@ -94,10 +94,14 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $mailer->to($contact);
         if($user) $mailer->setHeader('Reply-To', $user['mail']);
         $mailer->subject($this->getLang('subject'));
-        $ml_or_wl = $media ? 'ml' : 'wl';
+        if ($media) {
+            $url = ml($id, '', false, '&amp;', true);
+        } else {
+            $url = wl($id, '', true);
+        }
         $mailer->setBody(
             io_readFile($this->localFN('mail')),
-            array('PAGE' => $id, 'FEEDBACK' => $feedback, 'URL' => $ml_or_wl($id))
+            array('PAGE' => $id, 'FEEDBACK' => $feedback, 'URL' => $url)
         );
         $success = $mailer->send();
         header('Content-Type: text/html; charset=utf-8');

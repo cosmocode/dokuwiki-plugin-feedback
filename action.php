@@ -72,6 +72,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         global $INPUT;
         $id = $INPUT->str('id');
         $feedback = $INPUT->str('feedback');
+        $media = $INPUT->bool('media');
 
         // get the responsible contact
         $contact = $this->getFeedbackContact($id);
@@ -94,9 +95,10 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $mailer->to($contact);
         if($user) $mailer->setHeader('Reply-To', $user['mail']);
         $mailer->subject($this->getLang('subject'));
+        $ml_or_wl = $media ? 'ml' : 'wl';
         $mailer->setBody(
             io_readFile($this->localFN('mail')),
-            array('PAGE' => $id, 'FEEDBACK' => $feedback)
+            array('PAGE' => $id, 'FEEDBACK' => $feedback, 'URL' => $ml_or_wl($id))
         );
         $success = $mailer->send();
         header('Content-Type: text/html; charset=utf-8');

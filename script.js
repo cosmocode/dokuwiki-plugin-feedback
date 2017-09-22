@@ -6,7 +6,7 @@ jQuery(function () {
 
             var getPageId = function() {
                 //JSINFO avalible in doku.php
-                if (JSINFO && JSINFO.id) return JSINFO.id;
+                if (JSINFO) return JSINFO.id;
 
                 //JSINFO not avalible in detail.php
                 var media_id = window.location.href.match(/media=([^&#]*)/)[1];
@@ -60,7 +60,8 @@ jQuery(function () {
                                 {
                                     call: 'plugin_feedback',
                                     feedback: text,
-                                    id: getPageId()
+                                    id: getPageId(),
+                                    media: JSINFO ? '0' : '1'
                                 },
                                 // display thank you message
                                 function (result) {

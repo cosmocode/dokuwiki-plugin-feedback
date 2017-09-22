@@ -1,9 +1,17 @@
 jQuery(function () {
-    if (!JSINFO.plugin_feedback) return;
     jQuery('.plugin_feedback')
         .show()
         .click(function (e) {
             e.preventDefault();
+
+            var getPageId = function() {
+                //JSINFO avalible in doku.php
+                if (JSINFO) return JSINFO.id;
+
+                //JSINFO not avalible in detail.php
+                var media_id = window.location.href.match(/media=([^&#]*)/)[1];
+                return media_id;
+            };
 
             // create the dialog frame
             var $dialog = jQuery(
@@ -52,7 +60,8 @@ jQuery(function () {
                                 {
                                     call: 'plugin_feedback',
                                     feedback: text,
-                                    id: JSINFO.id
+                                    id: getPageId(),
+                                    media: JSINFO ? '0' : '1'
                                 },
                                 // display thank you message
                                 function (result) {

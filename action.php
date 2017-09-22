@@ -26,6 +26,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
 
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax');
         $controller->register_hook('DETAIL_STARTED', 'BEFORE', $this, 'handle_detail_started');
+        $controller->register_hook('DOKUWIKI_STARTED', 'BEFORE', $this, 'handleDokuStarted');
     }
 
     /**
@@ -123,10 +124,44 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
     }
 
     /**
+     * set our JSINFO isMedia-flag to false
+     *
+     * this simplifies our js, becuase now window.JSINFO.plugins.feedback.isMedia is always defined
+     */
+    public function handleDokuStarted() {
+        global $JSINFO;
+
+        if (empty($JSINFO['plugins'])) {
+            $JSINFO['plugins'] = [];
+        }
+        $JSINFO['plugins']['feedback'] = [
+            'isMedia' => false,
+        ];
+    }
+
+    /**
      * Set the flag when we are on the detail page
      */
     public function handle_detail_started() {
+        global $JSINFO, $ID, $IMG;
+
         $this->detail_page = true;
+
+        if (empty($JSINFO)) {
+            $JSINFO = [
+                'id' => $ID,
+                'namespace' => getNS($ID),
+                'plugins' => [],
+            ];
+        }
+        if (empty($JSINFO['plugins'])) {
+            $JSINFO['plugins'] = [];
+        }
+
+        $JSINFO['plugins']['feedback'] = [
+            'isMedia' => true,
+            'mediaID' => $IMG
+        ];
     }
 
     /**

@@ -105,6 +105,13 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
             array('FEEDBACK' => nl2br($feedback))
         );
         $success = $mailer->send();
+        //send a copy to the author
+        if ($success && $user && $this->getConf('send_copy')) {
+            //insert headers unseted by send()
+            $mailer->to($user['mail']);
+            $mailer->subject($this->getLang('subject'));
+            $success = $mailer->send();
+        }
         header('Content-Type: text/html; charset=utf-8');
 
         if (!$success) {

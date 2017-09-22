@@ -8,3 +8,4 @@
 $conf['allowanon']    = 1;
 $conf['include_parent_startpage']    = 0;
 $conf['span_translations']    = 0;
+$conf['send_copy']    = 0;

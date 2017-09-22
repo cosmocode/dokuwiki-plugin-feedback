@@ -3,7 +3,3 @@ Ein Nutzer hat Feedback zu Ihrer Seite @PAGE@ gesendet. Hier sind die Details:
 @FEEDBACK@
 
 Nutzer: @USER@
-
--- 
-Diese Mail kommt vom DokuWiki auf
-@DOKUWIKIURL@

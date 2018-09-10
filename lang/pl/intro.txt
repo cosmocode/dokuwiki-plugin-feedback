@@ -1,0 +1,5 @@
+====== Ustaw menedżerów opinii ======
+
+Ten formularz umożliwia zdefiniowanie adresów e-mail osób, które powinny otrzymywać opinie użytkowników w określonych katalogach.
+
+Przydzielone adresy e-mail są automatycznie używane w pod-katalogach. Możesz podać wiele adresów oddzielonych przecinkami. Aby określić główne katalogi, użyj gwiazdki ''*''.

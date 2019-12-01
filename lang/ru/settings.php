@@ -1,8 +1,8 @@
 <?php
 /**
- * english language file for feedback plugin
+ * Russian language file for feedback plugin
  *
- * @author Andreas Gohr <gohr@cosmocode.de>
+ * @author Intervision https://github.com/intervisionlord
  */
 
 $lang['allowanon'] = 'Разрешить анонимным пользователям отправлять комментарии';

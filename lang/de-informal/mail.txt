@@ -1,0 +1,5 @@
+Jemand hat Feedback zu deiner Seite @PAGE@ gesendet. Hier sind die Details:
+
+@FEEDBACK@
+
+Gesendet von: @USER@

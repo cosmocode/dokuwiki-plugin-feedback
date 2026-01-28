@@ -1,0 +1,10 @@
+Someone has sent feedback. You find the details here:
+
+Page: @PAGE@
+Date/Time: @DATE@
+User: @USER@
+Name: @FEEDBACK_NAME@
+
+Feedback text:
+
+@FEEDBACK@

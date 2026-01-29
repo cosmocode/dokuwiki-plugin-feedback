@@ -80,7 +80,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         // only on show and detail pages
         if($ACT != 'show' && !$this->detail_page) return false;
         // allow anonymous feedback?
-        if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) return false;
+        if(!isset($_SERVER['REMOTE_USER']) && !$this->getConf('allowanon')) return false;
         // any contact defined?
         if(!$this->getFeedbackContact($ID)) return false;
 
@@ -103,7 +103,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $event->stopPropagation();
 
         // allow anonymous feedback?
-        if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) {
+        if(!isset($_SERVER['REMOTE_USER']) && !$this->getConf('allowanon')) {
             http_status(400);
             die('no anonymous access');
         }
@@ -127,7 +127,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
 
         // get info on user
         $user = null;
-        if($_SERVER['REMOTE_USER']) {
+        if(isset($_SERVER['REMOTE_USER'])) {
             /** @var DokuWiki_Auth_Plugin $auth */
             global $auth;
             $user = $auth->getUserData($_SERVER['REMOTE_USER']);

@@ -4,12 +4,26 @@
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Andreas Gohr <gohr@cosmocode.de>
+ * 
+ * Additional Fields (@FEEBACK_...@):
+ * @author Volker Bürckel <volker@vrbdev.eu>
  */
 
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
+use dokuwiki\Logger;
+
 class action_plugin_feedback extends DokuWiki_Action_Plugin {
+
+    /** 
+     * Path to feedback plugin's original script.js file.
+     */
+    const OLD_SCRIPT = DOKU_PLUGIN . 'feedback/script.js';
+    /** 
+     * Path to replacement script.js file to extend the feedback form.
+     */
+    const NEW_SCRIPT = DOKU_CONF . 'plugin_feedback.script.js';
 
     /*
      * @var true if we are on the detail page
@@ -27,6 +41,32 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax');
         $controller->register_hook('DETAIL_STARTED', 'BEFORE', $this, 'handle_detail_started');
         $controller->register_hook('DOKUWIKI_STARTED', 'BEFORE', $this, 'handleDokuStarted');
+        // Use JS_SCRIPT_LIST to replace original script.js by extended one
+        $controller->register_hook('JS_SCRIPT_LIST', 'AFTER', $this, 'handleJsScriptList');
+    }
+
+    /**
+     * Event handler for JS_SCRIPT_LIST
+     * 
+     * If we have a plugin_feedback.script.js in DOKU_CONF, replace the original
+     * script DOKU_PLUGIN/feedback/script.js by this file.
+     *
+     * @see https://www.dokuwiki.org/devel:events:JS_SCRIPT_LIST
+     * @param Doku_Event $event Event object, $event->data holds the list
+     * @param mixed $param optional parameter passed when event was registered
+     * @return void
+     */
+    public function handleJsScriptList(Doku_Event $event, $param)
+    {
+        if (file_exists(self::NEW_SCRIPT)) {
+            foreach ($event->data as $key => $entry) {
+                if ($entry == self::OLD_SCRIPT) {
+                    $event->data[$key] = self::NEW_SCRIPT;
+                    Logger::debug('feedback: using ' . self::NEW_SCRIPT);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -40,7 +80,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         // only on show and detail pages
         if($ACT != 'show' && !$this->detail_page) return false;
         // allow anonymous feedback?
-        if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) return false;
+        if(!isset($_SERVER['REMOTE_USER']) && !$this->getConf('allowanon')) return false;
         // any contact defined?
         if(!$this->getFeedbackContact($ID)) return false;
 
@@ -63,7 +103,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $event->stopPropagation();
 
         // allow anonymous feedback?
-        if(!$_SERVER['REMOTE_USER'] && !$this->getConf('allowanon')) {
+        if(!isset($_SERVER['REMOTE_USER']) && !$this->getConf('allowanon')) {
             http_status(400);
             die('no anonymous access');
         }
@@ -73,6 +113,10 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         $id = $INPUT->str('id');
         $feedback = $INPUT->str('feedback');
         $media = $INPUT->bool('media');
+        // User defined fields start with "FEEDBACK_"
+        $req_fields = array_filter($_REQUEST, function ($key) { 
+            return str_starts_with($key, "FEEDBACK_");
+        }, ARRAY_FILTER_USE_KEY);
 
         // get the responsible contact
         $contact = $this->getFeedbackContact($id);
@@ -83,7 +127,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
 
         // get info on user
         $user = null;
-        if($_SERVER['REMOTE_USER']) {
+        if(isset($_SERVER['REMOTE_USER'])) {
             /** @var DokuWiki_Auth_Plugin $auth */
             global $auth;
             $user = $auth->getUserData($_SERVER['REMOTE_USER']);
@@ -102,7 +146,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
         }
         $mailer->setBody(
             io_readFile($this->localFN('mail')),
-            array('PAGE' => $id, 'FEEDBACK' => $feedback, 'URL' => $url),
+            array_merge(array('PAGE' => $id, 'FEEDBACK' => $feedback, 'URL' => $url), $req_fields),
             array('FEEDBACK' => nl2br($feedback))
         );
         $success = $mailer->send();
@@ -165,7 +209,7 @@ class action_plugin_feedback extends DokuWiki_Action_Plugin {
     }
 
     /**
-     * Get the responsible contact for givven ID
+     * Get the responsible contact for given ID
      *
      * @param $id
      * @return false|string

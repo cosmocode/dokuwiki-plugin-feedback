@@ -1,0 +1,18 @@
+The files in this directory help you to extend the feedback dialog and mail.
+
+To extend the feedback dialog to more than just a single text area, do the following:
+
+(1) Script:
+Design your input dialog using the script.js file in this directory as a template. Doing so, add any additional data that you want to use in the feedback mail to the POST result by using names starting with "FEEDBACK_" (see sample FEEDBACK_NAME in script.js). 
+
+Copy your script file to [DOKUWIKI BASE]/conf/plugin_feedback.script.js OR use the jstweak plugin (https://www.dokuwiki.org/plugin:jstweak) to replace the plugin's original script.js by your own script file. 
+
+(2) Localization:
+If you use localized text like e.g. placeholder texts, declare them in lang.php. 
+  Example: $lang['js']['placeholder_name'] = "Name";
+Note that you don't need to modify the original lang.php in the [DOKUWIKI BASE]/lib/plugins/feedback/lang but rather create a new file [DOKUWIKI BASE]/conf/plugin_lang/feedback/<language>/lang.php for your extensions (see https://www.dokuwiki.org/plugin:feedback). 
+
+Create a new mail.txt file using your new variable, e.g. @FEEDBACK_NAME@. mail.txt can also be placed in [DOKUWIKI BASE]/conf/plugin_lang/feedback/<language>/.
+
+Hint:
+You find a sample lang.php and a sample mail.txt in this directory as well, which you can copy to [DOKUWIKI BASE]/conf/plugin_lang/feedback/en/.
